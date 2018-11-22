@@ -1,0 +1,125 @@
+[sp16a-mySql]
+
+server context.xml 수정사항
+
+1. 오라클 사용시 
+
+    <Resource auth="Container"
+    driverClassName = "oracle.jdbc.driver.OracleDriver"
+    maxActive="50"
+    maxWait="1000"
+    name="jdbc/Oracle11g"
+    username="scott"
+    password="tiger"
+    type="javax.sql.DataSource"
+    url="jdbc:oracle:thin:@localhost:1521:xe"
+	/>
+
+
+2. mySQL 사용시 
+
+  	<!-- JSP : MySQL DB     -->
+    <Resource 
+    name="jdbc/WorklightDS"
+    auth="Container"
+    type="javax.sql.DataSource"
+    maxActive="100"
+    maxIdle="30"
+    maxWait="10000"
+    username="scott"
+    password="tiger"
+    driverClassName="com.mysql.jdbc.Driver"
+    url="jdbc:mysql://localhost:3306/scott_db?serverTimezone=UTC&amp;characterEncoding=utf8"
+    />
+      
+
+
+[MySQL ]
+
+
+# scott 에게 권한 상승 
+GRANT ALL on scott_db.* TO scott@'localhost';
+
+# 데이타베이스 작성
+create database testdb1 character set utf8;
+
+# 데이터베이스 사용
+use testdb1;
+
+# 데이터베이스안에 테이블 작성 (실제 사용할 정보 저장되는 공간)
+# 키보드 ESC 아래, 1키 왼쪽에 있는 `키 사용(' 키가 아님)
+create table `mard` ( 
+	`id` varchar(10) NOT NULL, 
+    `name` varchar(4),
+    `address` varchar(50),
+    primary key(`id`)
+    );
+    
+# 데이터베이스 안의 테이블 삭제 
+drop table `mard`;
+
+
+create database scott_db character set utf8;
+use scott_db;
+
+DROP TABLE IF EXISTS `mvc_board`;
+CREATE table `mvc_board`(
+    BID INT(4) auto_increment ,
+    BNAME VARCHAR(20),
+    BTITLE VARCHAR(100),
+    BCONTENT VARCHAR(300),
+    BDATE DATETIME DEFAULT NOW(),
+    BHIT INT(4) DEFAULT 0,
+    BGROUP INT(4),
+    BSTEP INT(4),
+    BINDENT INT(4),
+	PRIMARY KEY (`BID`)
+) ENGINE=innodb DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `mvc_board` (`BNAME`,`BTITLE`, `BCONTENT`, `BHIT`,`BGROUP`, `BSTEP`, `BINDENT`)
+  VALUES ('오프라 윈프리', '가장 큰 모험', '여러분이 할 수 있는 가장 큰 모험은 바로 여러분이 꿈꾸는 삶을 사는 것입니다.', 0, LAST_INSERT_ID()+1, 0, 0);
+
+INSERT INTO `mvc_board` (`BNAME`,`BTITLE`, `BCONTENT`, `BHIT`,`BGROUP`, `BSTEP`, `BINDENT`)
+  VALUES ('랄프 왈도 에머슨', '도토리', '수천개의 숲도 한개의 도토리 열매에서 만들어진다.', 0, LAST_INSERT_ID()+1, 0, 0);
+
+INSERT INTO `mvc_board` (`BNAME`,`BTITLE`, `BCONTENT`, `BHIT`,`BGROUP`, `BSTEP`, `BINDENT`)
+  VALUES ('마이클 J. 폭스', '가족', '가족은 중요한게 아니라 모든 것입니다.', 0, LAST_INSERT_ID()+1, 0, 0);
+
+
+select * from mvc_board;
+
+
+
+
+
+[DOS & Oracle]
+MSDOS> sqlplus system/oracle
+SQL> create user scott identified by tiger; 
+SQL> grant connect, resource to scott;
+SQL> exit
+MSDOS>> sqlplus scott/tiger
+SQL> CREATE SEQUENCE mvc_board_seq;
+
+DROP TABLE mvc_board;
+CREATE table mvc_board(
+    bId NUMBER(4) PRIMARY KEY,
+    bName VARCHAR2(20),
+    bTitle VARCHAR2(100),
+    bContent VARCHAR2(300),
+    bDate DATE DEFAULT SYSDATE,
+    bHit NUMBER(4) DEFAULT 0,
+    bGroup NUMBER(4),
+    bStep NUMBER(4),
+    bIndent NUMBER(4)
+    );
+    
+DROP SEQUENCE mvc_board_seq;
+CREATE SEQUENCE mvc_board_seq;
+
+INSERT INTO mvc_board (bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent) 
+    values (mvc_board_seq.nextval, 'abcd', 'is title', 'is content', 0, mvc_board_seq.currval, 0, 0);
+INSERT INTO mvc_board (bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent) 
+    values (mvc_board_seq.nextval, 'joy', 'Happy man', '洹몃뒗 �빆�긽 �뻾蹂듯빀�땲�떎.', 0, mvc_board_seq.currval, 0, 0);
+
+
