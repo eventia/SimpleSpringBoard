@@ -5,6 +5,8 @@
 3. STS 에서 SimpleSpringBoard 소스 가져오기
 
 * window -- show view -- Other -- "Git" >> Git Repositories
+
 * [Git Repositories] -- Clone a Git Repository and ... -- Clone URI 
+
 * -(NEXT)- URI=>[https://github.com/eventia/SimpleSpringBoard.git] (NEXT)(NEXT)(Finish)
 
